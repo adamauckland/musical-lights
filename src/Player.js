@@ -24,8 +24,8 @@ export class Player extends Component {
 
 		this.audioContext = undefined;
 		this.iosAudioContextUnlocked = false;
-
 		this.intervalHandler = null;
+		this.startTime = 0;
 	}
 
 	componentDidMount() {
@@ -151,11 +151,15 @@ export class Player extends Component {
 	setupOscillator() {
 		this.gainNode = this.audioContext.createGain();
 		this.oscillator = this.audioContext.createOscillator();
-
-		this.gainNode.gain.value = 1;
+		this.oscillator.type = "sine";
 		this.oscillator.frequency.value = this.getCurrentFrequency();
 
+		this.gainNode.gain.value = 1;
 		this.gainNode.connect(this.audioContext.destination);
+		this.startTime = this.audioContext.currentTime;
+
+		this.gainNode.gain.setValueAtTime(1, this.audioContext.currentTime);
+		this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.2);
 
 		this.oscillator.start(0);
 
@@ -182,6 +186,36 @@ export class Player extends Component {
 
 	adjustFrequency() {
 		this.oscillator.frequency.value = this.getCurrentFrequency();
+		if (this.oscillator.frequency.value === 0) {
+			// this.gainNode.gain.setValueAtTime(1, this.audioContext.currentTime);
+		} else {
+			this.gainNode.gain.cancelScheduledValues(this.audioContext.currentTime);
+			// this.gainNode.gain.setValueAtTime(1, this.audioContext.currentTime);
+			this.gainNode.gain.linearRampToValueAtTime(1, this.audioContext.currentTime + 0.1);
+			this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.1 + (Math.random() * 0.2));
+		}
+	}
+
+	nudgeRight() {
+		const roll = this.state.pianoRoll;
+		const top = roll.grid.pop();
+
+		roll.grid.unshift(top);
+
+		this.setState({
+			pianoRoll: roll
+		});
+	}
+
+	nudgeLeft() {
+		const roll = this.state.pianoRoll;
+		const bottom = roll.grid.shift();
+
+		roll.grid.push(bottom);
+
+		this.setState({
+			pianoRoll: roll
+		});
 	}
 
 	render() {
@@ -206,6 +240,11 @@ export class Player extends Component {
 					<div className="note-container">
 						{ this.state.pianoRoll.grid.map((notes, index) => <NoteSlice key={ index } isPlaying={ (this.state.isTonePlaying || this.state.isThisPlaying) && index === this.state.beatStep } notes={ notes } clickDelegate={ (note) => this.toggleNote(notes, note) }></NoteSlice>) }
 					</div>
+				</div>
+
+				<div className="button-wrapper">
+					<button className="button-nudge" onClick={ () => this.nudgeLeft() }>⇠</button>
+					<button className="button-nudge" onClick={ () => this.nudgeRight() }>⇢</button>
 				</div>
 
 				<Tone
