@@ -187,11 +187,12 @@ export class Player extends Component {
 	adjustFrequency() {
 		this.oscillator.frequency.value = this.getCurrentFrequency();
 		if (this.oscillator.frequency.value === 0) {
-			// this.gainNode.gain.setValueAtTime(1, this.audioContext.currentTime);
+			this.gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
 		} else {
 			this.gainNode.gain.cancelScheduledValues(this.audioContext.currentTime);
-			// this.gainNode.gain.setValueAtTime(1, this.audioContext.currentTime);
-			this.gainNode.gain.linearRampToValueAtTime(1, this.audioContext.currentTime + 0.1);
+			// we need to set to zero to avoid clicks
+			this.gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+			this.gainNode.gain.linearRampToValueAtTime(1, this.audioContext.currentTime + 0.01);
 			this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.1 + (Math.random() * 0.2));
 		}
 	}
