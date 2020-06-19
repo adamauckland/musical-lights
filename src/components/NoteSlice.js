@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NoteButton } from "./NoteButton";
-import { noop } from "./noop";
+import { noop } from "../noop";
 
 export class NoteSlice extends Component {
 	constructor(props) {

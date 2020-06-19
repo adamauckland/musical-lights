@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Tone from "react-tone";
-import { PianoRoll } from "./data/PianoRoll";
+import { PianoRoll } from "../data/PianoRoll";
 import { NoteSlice } from "./NoteSlice";
 
 export class Player extends Component {
@@ -37,7 +37,9 @@ export class Player extends Component {
 			this.playEmptyBuffer();
 		}
 
-		this.setState({ isTonePlaying: true });
+		this.setState({
+			isTonePlaying: true
+		});
 	}
 
 	playEmptyBuffer() {
@@ -122,8 +124,6 @@ export class Player extends Component {
 
 		if (currentNoteSearch.length > 0) {
 			let currentNote = currentNoteSearch[0];
-
-			console.log(currentNote.frequency);
 
 			return currentNote.frequency;
 		}
