@@ -7,37 +7,51 @@ export class Player extends Component {
 	constructor(props) {
 		super(props);
 
+		let tracks = localStorage["tracks"];
+
+		if (!tracks) {
+			tracks = [];
+		}
+
 		this.state = {
 			isTonePlaying: false,
+			isThisPlaying: false,
 			pianoRoll: new PianoRoll(),
 			beatStep: 0,
-			stopping: false
+			stopping: false,
+			storedLoops: tracks
 		};
 
 		this.audioContext = undefined;
 		this.iosAudioContextUnlocked = false;
+
+		this.intervalHandler = null;
 	}
 
 	componentDidMount() {
 		this.audioContext = new AudioContext();
 	}
 
-	handleClick = () => {
-		if (!this.iosAudioContextUnlocked) this.playEmptyBuffer();
+	handleClick() {
+		if (!this.iosAudioContextUnlocked) {
+			this.playEmptyBuffer();
+		}
 
 		this.setState({ isTonePlaying: true });
 	}
 
-	playEmptyBuffer = () => {
+	playEmptyBuffer() {
 		// start an empty buffer with an instance of AudioContext
 		const buffer = this.audioContext.createBuffer(1, 1, 22050);
 		const node = this.audioContext.createBufferSource();
+
 		node.buffer = buffer;
 		node.start(0);
+
 		this.iosAudioContextUnlocked = true;
 	}
 
-	handleToneStop = () => {
+	handleToneStop() {
 		let nextBeatStep = this.state.beatStep + 1;
 
 		// loop
@@ -80,8 +94,18 @@ export class Player extends Component {
 	}
 
 	stop() {
+		// if we're playing, disconnect the oscillator
+		if (this.state.isThisPlaying === true) {
+			this.oscillator.disconnect(this.gainNode);
+
+			if (this.intervalHandler) {
+				window.clearInterval(this.intervalHandler);
+			}
+		}
+
 		this.setState({
 			...this.state,
+			isThisPlaying: false,
 			stopping: true
 		});
 	}
@@ -108,17 +132,81 @@ export class Player extends Component {
 		return 0;
 	}
 
+	go() {
+		// don't double play
+		if (this.state.isThisPlaying === true) {
+			return;
+		}
+
+		this.setState({
+			isThisPlaying: true,
+			beatStep: 0
+		}, () => {
+			this.setupOscillator();
+
+			this.setupBeatTimer();
+		});
+	}
+
+	setupOscillator() {
+		this.gainNode = this.audioContext.createGain();
+		this.oscillator = this.audioContext.createOscillator();
+
+		this.gainNode.gain.value = 1;
+		this.oscillator.frequency.value = this.getCurrentFrequency();
+
+		this.gainNode.connect(this.audioContext.destination);
+
+		this.oscillator.start(0);
+
+		this.oscillator.connect(this.gainNode);
+	}
+
+	setupBeatTimer() {
+		this.intervalHandler = window.setInterval(() => {
+			let nextBeatStep = this.state.beatStep + 1;
+
+			// loop
+			if (nextBeatStep >= this.state.pianoRoll.grid.length) {
+				nextBeatStep = 0;
+			}
+
+			this.setState({
+				...this.state,
+				beatStep: nextBeatStep
+			}, () => {
+				this.adjustFrequency();
+			});
+		}, 250);
+	}
+
+	adjustFrequency() {
+		this.oscillator.frequency.value = this.getCurrentFrequency();
+	}
+
 	render() {
 		// Pass the same instance of AudioContext that played an empty buffer to <Tone />
 		return (
 			<div>
 				<div className="shuttle">
-					{ this.state.isTonePlaying ? <button className="shuttle-button" onClick={ () => this.stop() }>Stop</button> : <button className="shuttle-button" onClick={ this.handleClick}>Play</button> }
+					{ this.state.isTonePlaying ?
+						<button className="shuttle-button" onClick={ () => this.stop() }>Stop</button>
+						:
+						<button className="shuttle-button" onClick={ () => this.handleClick() }>Play RT</button>
+					}
+
+					{ this.state.isThisPlaying ?
+						<button className="shuttle-button" onClick={ () => this.stop() }>Stop</button>
+						:
+						<button className="shuttle-button" onClick={ () => this.go() }>Play</button>
+					}
 				</div>
 
-				{ this.state.beatStep }
-
-				{ this.state.pianoRoll.grid.map((notes, index) => <NoteSlice key={ index } isPlaying={ this.state.isTonePlaying && index === this.state.beatStep } notes={ notes } clickDelegate={ (note) => this.toggleNote(notes, note) }></NoteSlice>) }
+				<div className="note-wrapper">
+					<div className="note-container">
+						{ this.state.pianoRoll.grid.map((notes, index) => <NoteSlice key={ index } isPlaying={ (this.state.isTonePlaying || this.state.isThisPlaying) && index === this.state.beatStep } notes={ notes } clickDelegate={ (note) => this.toggleNote(notes, note) }></NoteSlice>) }
+					</div>
+				</div>
 
 				<Tone
 					audioContext={ this.audioContext }
@@ -126,7 +214,7 @@ export class Player extends Component {
 					frequency={ this.getCurrentFrequency() }
 					volume={ 1 }
 					length={ 0.5 }
-					onStop={ this.handleToneStop }
+					onStop={ () => this.handleToneStop() }
 				/>
 			</div>
 		);

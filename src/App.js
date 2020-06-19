@@ -21,7 +21,7 @@ export class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				{ 	this.state.showPlayer ? <Player></Player> : <button onClick={ () => this.showPlayer() }>Start</button> }
+				<Player></Player>
 			</div>
 		);
 	}

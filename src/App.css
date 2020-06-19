@@ -1,24 +1,41 @@
 .shuttle {
-	margin-bottom: 50px;
+	margin-bottom: 20px;
 	text-align: center;
 }
 
 .shuttle-button {
 	background: transparent;
-	border: solid 2px #000;
+	border: solid 3px #000;
 	border-radius: 50px;
-	font-size: 50px;
-	padding: 10px 20px;
+	font-size: 40px;
+	margin: 20px;
+	padding: 20px 40px;
 	text-transform: uppercase;
-	width: 5em;
 }
 
 .shuttle-button:focus {
 
 }
 
+.note-wrapper {
+	text-align: center;
+}
+
+.note-container {
+	margin-left: auto;
+    margin-right: auto;
+	width: 800px;
+}
+
 .note-column {
 	float: left;
+}
+
+.note-column:nth-child(1),
+.note-column:nth-child(5),
+.note-column:nth-child(9),
+.note-column:nth-child(13) {
+	background-color: #ccc;
 }
 
 .note-button {
@@ -31,7 +48,7 @@
 }
 
 .note-button.enabled-true {
-	background: #ff0000;
+	background: #ff6868;
 }
 
 .note-column.playing-true .note-button {
@@ -39,5 +56,25 @@
 }
 
 .note-column.playing-true .note-button.enabled-true {
-	background: #aa0000;
+	background: #000;
+}
+
+.saved-loops {
+	clear: both;
+	padding-top: 20px;
+}
+
+.button-wrapper {
+	text-align: center;
+}
+
+.button-wrapper .button-save {
+	background-color: transparent;
+	border: solid 1px #000;
+	margin-left: 5px;
+	text-transform: uppercase;
+}
+
+.button-wrapper .label-save {
+	text-transform: uppercase;
 }
