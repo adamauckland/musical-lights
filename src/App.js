@@ -10,7 +10,16 @@ export class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<Player></Player>
+				<table style={{ width: "100%"}}>
+					<tr>
+						<td>
+							<Player></Player>
+						</td>
+						<td>
+							<Player></Player>
+						</td>
+					</tr>
+				</table>
 			</div>
 		);
 	}

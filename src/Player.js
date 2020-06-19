@@ -151,7 +151,7 @@ export class Player extends Component {
 	setupOscillator() {
 		this.gainNode = this.audioContext.createGain();
 		this.oscillator = this.audioContext.createOscillator();
-		this.oscillator.type = "sine";
+		this.oscillator.type = "triangle";
 		this.oscillator.frequency.value = this.getCurrentFrequency();
 
 		this.gainNode.gain.value = 1;

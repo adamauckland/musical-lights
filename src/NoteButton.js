@@ -30,7 +30,6 @@ export class NoteButton extends Component {
 		return (
 			<React.Fragment>
 				<button className={ classes } onClick={ () => this.state.clickDelegate(this.state.note) }>{ this.state.note.enabled ? "On" : "Off" }</button>
-				<br />
 			</React.Fragment>
 		);
 	}
