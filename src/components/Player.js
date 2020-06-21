@@ -31,6 +31,8 @@ export class Player extends Component {
 	}
 
 	componentDidMount() {
+		let AudioContext = window.AudioContext || window.webkitAudioContext;
+
 		this.audioContext = new AudioContext();
 	}
 
