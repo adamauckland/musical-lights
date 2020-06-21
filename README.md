@@ -19,3 +19,6 @@ Know issues:
 
 Horizontal alignment of buttons on small viewports (mobile portrait).
 
+Tested on:
+
+Chrome, Safari, Firefox, iOS, Edge
