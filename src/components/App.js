@@ -20,22 +20,18 @@ export class App extends Component {
 
 	render() {
 		return (
-			<div className="App">
-				<table style={{ width: "100%"}}>
-					<tbody>
-						<tr>
-							<td>
-								<Player transpose={ -24 } start={ (fn) => this.attachStartHandler(fn) }></Player>
-							</td>
-							<td>
-								<button className="shuttle-button" onClick={ () => this.go() }>Play Both</button>
-							</td>
-							<td>
-								<Player transpose={ -12 } start={ (fn) => this.attachStartHandler(fn) }></Player>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<div className="App" style={{ textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>
+				<div style={{ textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>
+					<div className="panel-separator">
+						<Player transpose={ -24 } start={ (fn) => this.attachStartHandler(fn) }></Player>
+					</div>
+					<div className="panel-center">
+						<button className="shuttle-button" onClick={ () => this.go() }>Play Both</button>
+					</div>
+					<div className="panel-separator">
+						<Player transpose={ -12 } start={ (fn) => this.attachStartHandler(fn) }></Player>
+					</div>
+				</div>
 			</div>
 		);
 	}

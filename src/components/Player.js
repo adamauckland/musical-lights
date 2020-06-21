@@ -236,7 +236,7 @@ export class Player extends Component {
 					{ this.state.isTonePlaying ?
 						<button className="shuttle-button" onClick={ () => this.stop() }>Stop</button>
 						:
-						<button className="shuttle-button" onClick={ () => this.handleClick() }>Play RT</button>
+						<button className="shuttle-button" onClick={ () => this.handleClick() }>Play React-Tone</button>
 					}
 
 					{ this.state.isThisPlaying ?
@@ -248,7 +248,9 @@ export class Player extends Component {
 
 				<div className="note-wrapper">
 					<div className="note-container">
-						{ this.state.pianoRoll.grid.map((notes, index) => <NoteSlice key={ index } isPlaying={ (this.state.isTonePlaying || this.state.isThisPlaying) && index === this.state.beatStep } notes={ notes } clickDelegate={ (note) => this.toggleNote(notes, note) }></NoteSlice>) }
+						<div className="note-grid">
+							{ this.state.pianoRoll.grid.map((notes, index) => <NoteSlice key={ index } isPlaying={ (this.state.isTonePlaying || this.state.isThisPlaying) && index === this.state.beatStep } notes={ notes } clickDelegate={ (note) => this.toggleNote(notes, note) }></NoteSlice>) }
+						</div>
 					</div>
 				</div>
 
