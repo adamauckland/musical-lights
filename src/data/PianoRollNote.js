@@ -1,6 +1,6 @@
 export class PianoRollNote {
-    constructor(frequency) {
-        this.enabled = false;
-        this.frequency = frequency;
-    }
+	constructor(frequency) {
+		this.enabled = false;
+		this.frequency = frequency;
+	}
 }

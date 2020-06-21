@@ -1,7 +1,8 @@
 import { PianoRollNote } from "./PianoRollNote";
 
 export class PianoRoll {
-    constructor() {
+    constructor(transpose) {
+        this.transpose = transpose;
         this.reset(16);
     }
 
@@ -15,8 +16,7 @@ export class PianoRoll {
             for (let semitone = 12; semitone >= 0; semitone--) {
                 // 440 is A4, start at A3, then adjust up to C3
                 let modifiedSemitone = semitone + 3;
-
-                let frequency = 440 * Math.pow(2, (modifiedSemitone - 12) / 12);
+                let frequency = 440 * Math.pow(2, (modifiedSemitone + this.transpose) / 12);
 
                 semitones.push(new PianoRollNote(frequency));
             }

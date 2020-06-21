@@ -5,6 +5,16 @@ import { Player } from './Player';
 export class App extends Component {
 	constructor(props) {
 		super(props);
+
+		this.fn = [];
+	}
+
+	go() {
+		this.fn.forEach(fn => fn());
+	}
+
+	attachStartHandler(fn) {
+		this.fn.push(fn);
 	}
 
 	render() {
@@ -13,10 +23,13 @@ export class App extends Component {
 				<table style={{ width: "100%"}}>
 					<tr>
 						<td>
-							<Player></Player>
+							<Player transpose={ -24 } start={ (fn) => this.attachStartHandler(fn) }></Player>
 						</td>
 						<td>
-							<Player></Player>
+							<button className="shuttle-button" onClick={ () => this.go() }>Play</button>
+						</td>
+						<td>
+							<Player transpose={ -12 } start={ (fn) => this.attachStartHandler(fn) }></Player>
 						</td>
 					</tr>
 				</table>

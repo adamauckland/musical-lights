@@ -16,7 +16,7 @@ export class Player extends Component {
 		this.state = {
 			isTonePlaying: false,
 			isThisPlaying: false,
-			pianoRoll: new PianoRoll(),
+			pianoRoll: new PianoRoll(props.transpose),
 			beatStep: 0,
 			stopping: false,
 			storedLoops: tracks
@@ -26,6 +26,8 @@ export class Player extends Component {
 		this.iosAudioContextUnlocked = false;
 		this.intervalHandler = null;
 		this.startTime = 0;
+
+		props.start(() => { this.go() });
 	}
 
 	componentDidMount() {
