@@ -14,3 +14,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The main component is:
 
 ### `src/Player.js`
+
+Know issues:
+
+Horizontal alignment of buttons on small viewports (mobile portrait).
+
