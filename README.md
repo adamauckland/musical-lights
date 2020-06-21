@@ -1,6 +1,6 @@
 Musical Lights. A toy to encourage musical exploration.
 
-[https://musical-lights.ams3.digitaloceanspaces.com/index.html](View the working version here.)
+[View the working version here.](https://musical-lights.ams3.digitaloceanspaces.com/index.html)
 
 ### `yarn start`
 
